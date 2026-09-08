@@ -3,31 +3,6 @@
 ForceFlowAb is a research codebase for antibody sequence and structure design with rectified flow. The repository contains training and inference pipelines for single-CDR and multi-CDR design, variable-length CDR generation, classifier-free guidance (CFG), optional mixture-of-experts (MoE) routing, energy-guided sampling, and antibody-antigen docking workflows.
 
 
-## Features
-
-- Joint antibody sequence and backbone structure generation with rectified flow.
-- Single-CDR and multi-CDR design modes.
-- Fixed, ranged, or discrete variable-length CDR generation.
-- Classifier-free antigen guidance for sequence, position, and orientation sampling.
-- Configurable MoE routing with routed and shared experts.
-- Two-stage training for joint sequence-structure learning and sequence-focused fine-tuning.
-- Optional energy guidance during sampling.
-- Design from test sets, user-provided PDB structures, or HDOCK-generated antibody-antigen poses.
-
-## Repository layout
-
-```text
-ForceFlowAb/
-|-- configs/                 # Training and inference configurations
-|-- diffab/                  # Models, datasets, geometry, sampling, and evaluation code
-|-- bin/                     # Optional external docking executables
-|-- train.py                 # Main training entry point
-|-- train_sec.py             # Second-stage training entry point
-|-- train_two_stage.sh       # Two-stage training wrapper
-|-- design_pdb.py            # Design from a PDB structure
-|-- design_testset.py        # Design on a configured test split
-|-- design_dock.py           # Docking followed by antibody design
-`-- env.yaml                 # Conda environment specification
 ```
 
 ## Installation
