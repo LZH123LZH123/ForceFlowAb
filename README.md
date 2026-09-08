@@ -1,6 +1,6 @@
 # ForceFlowAb
 
-ForceFlowAb is a research codebase for antibody sequence and structure design with rectified flow. The repository contains training and inference pipelines for single-CDR and multi-CDR design, optional mixture-of-experts (MoE) routing, energy-guided sampling, and antibody-antigen docking workflows.
+ForceFlowAb is a research codebase for antibody sequence and structure design with rectified flow. The repository contains training and inference pipelines for single-CDR and multi-CDR design, variable-length CDR generation, classifier-free guidance (CFG), optional mixture-of-experts (MoE) routing, energy-guided sampling, and antibody-antigen docking workflows.
 
 
 ## Features
@@ -8,6 +8,7 @@ ForceFlowAb is a research codebase for antibody sequence and structure design wi
 - Joint antibody sequence and backbone structure generation with rectified flow.
 - Single-CDR and multi-CDR design modes.
 - Fixed, ranged, or discrete variable-length CDR generation.
+- Classifier-free antigen guidance for sequence, position, and orientation sampling.
 - Configurable MoE routing with routed and shared experts.
 - Two-stage training for joint sequence-structure learning and sequence-focused fine-tuning.
 - Optional energy guidance during sampling.
@@ -198,6 +199,56 @@ the sampler. Enable it together with variable lengths, for example:
   --cdr-lengths 'H3:8-16' \
   --energy true
 ```
+
+### Classifier-free guidance
+
+ForceFlowAb supports classifier-free guidance (CFG) for both the standard and
+sequence-fine-tuned rectified-flow models. During training, a configurable
+fraction of examples has its antigen context removed, allowing the same model
+to learn conditional and antigen-unconditional predictions. Enable this in the
+training configuration:
+
+```yaml
+model:
+  classifier_free_guidance:
+    enabled: true
+    condition_dropout_prob: 0.1
+
+dataset:
+  train:
+    transform:
+      - type: mask_multiple_cdrs
+      - type: merge_chains
+      - type: patch_around_anchor
+      - type: random_remove_antigen
+```
+
+`random_remove_antigen` must appear after `merge_chains` and
+`patch_around_anchor`. When CFG is enabled, `condition_dropout_prob` controls
+how often the antigen residues are removed and must be between `0` and `1`.
+
+At inference time, configure the guidance scale under `sampling`:
+
+```yaml
+sampling:
+  classifier_free_guidance:
+    enabled: true
+    scale: 1.5
+```
+
+The sampler combines the antigen-unconditional and antigen-conditional vector
+fields as `(1 - scale) * unconditional + scale * conditional` for amino-acid,
+position, and orientation updates. A scale of `1.0` is ordinary conditional
+sampling and avoids the second model evaluation; values above `1.0` strengthen
+antigen conditioning, while `0.0` uses the antigen-unconditional prediction.
+The scale must be finite and non-negative. Use a checkpoint trained with
+`model.classifier_free_guidance.enabled: true` whenever the inference scale is
+not `1.0`.
+
+CFG and energy guidance are independent and can be enabled together. CFG
+changes the learned sampling vector field, whereas energy guidance adds an
+external force/torque update during the configured sampling steps. CFG is also
+compatible with fixed or variable CDR lengths.
 
 ### Docking-guided design
 
