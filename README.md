@@ -4,7 +4,6 @@ ForceFlowAb is a research codebase for antibody sequence and structure design wi
 
 The following content is based on https://github.com/iobio-zjut/ForceFlowAb, with the addition of variable-length CDR generation and classifier-free guidance (CFG).
 
-
 ```
 
 ## Installation
@@ -17,6 +16,10 @@ conda activate ForceFlowAb
 ```
 
 The repository includes `data/sabdab_summary_all.tsv`, a snapshot of the SAbDab index used by the example configurations. Download the corresponding antibody structure files separately, place them under `data/`, and update the dataset paths in the selected YAML configuration. 
+
+## Webserver
+
+The ForceFlowAb web server is available at https://zhanglab-bioinf.com/ForceFlowAb/
 
 ## Pretrained Weights
 
