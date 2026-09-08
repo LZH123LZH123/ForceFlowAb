@@ -1,6 +1,7 @@
 # ForceFlowAb
 
 ForceFlowAb is a research codebase for antibody sequence and structure design with rectified flow. The repository contains training and inference pipelines for single-CDR and multi-CDR design, variable-length CDR generation, classifier-free guidance (CFG), optional mixture-of-experts (MoE) routing, energy-guided sampling, and antibody-antigen docking workflows.
+
 The following content is based on https://github.com/iobio-zjut/ForceFlowAb, with the addition of variable-length CDR generation and classifier-free guidance (CFG).
 
 
