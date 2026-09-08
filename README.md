@@ -55,36 +55,13 @@ python design_pdb.py /path/to/antibody_antigen.pdb \
   --out_root ./results
 ```
 
-`--heavy` and `--light` specify the antibody heavy- and light-chain IDs in the input PDB. All remaining chains are treated as antigen chains. By default, the script applies Chothia renumbering and can detect the first heavy and light chains automatically; specifying the IDs explicitly is recommended. When using `--no_renumber`, at least one antibody chain ID must be provided. For a nanobody, provide only `--heavy`.
+`--heavy` and `--light` specify the antibody heavy- and light-chain IDs in the input PDB. All remaining chains are treated as antigen chains. By default, the script applies Chothia renumbering and can detect the first heavy and light chains automatically; specifying the IDs explicitly is recommended. For a nanobody, provide only `--heavy`.
 
-Run `python design_pdb.py --help` or `python design_testset.py --help` for the complete set of arguments.
+
 
 ### Variable-length CDR design
 
-Use `--cdr-lengths` for exact lengths, inclusive ranges, or discrete choices:
-
-```bash
-# Four designs; each output independently samples an H3 length from 8 through 16.
-./DP.sh \
-  --type antibody \
-  --region h3 \
-  --pdb /path/to/antibody_antigen.pdb \
-  --heavy H \
-  --light L \
-  --num-samples 4 \
-  --cdr-lengths 'H3:8-16'
-
-# Multi-CDR design with discrete H3 choices and a fixed L3 length.
-./DP.sh \
-  --type antibody \
-  --region all \
-  --pdb /path/to/antibody_antigen.pdb \
-  --heavy H \
-  --light L \
-  --cdr-lengths 'H3:10|12|14,L3:9'
-```
-
-The same option is available on `design_pdb.py`. In YAML, use:
+In YAML, use:
 
 ```yaml
 sampling:
@@ -94,9 +71,9 @@ sampling:
     H_CDR3: 8-16
     L_CDR3: 9
   cdr_initial_residues:
-    H_CDR3: GLY
-    L_CDR3: SER
-  cdr_initial_residue_strength: 1.0
+    H_CDR3: {}
+    L_CDR3: {}
+  cdr_initial_residue_strength: 0.0
 ```
 
 Supported CDR names are `H1`, `H2`, `H3`, `L1`, `L2`, and `L3`; supported
@@ -130,16 +107,6 @@ gradient, it verifies that the number of selected CDR C-alpha atoms equals the
 per-sample `generate_flag` count. The energy backend runs on the same device as
 the sampler. Enable it together with variable lengths, for example:
 
-```bash
-./DP.sh \
-  --type antibody \
-  --region h3 \
-  --pdb /path/to/antibody_antigen.pdb \
-  --heavy H \
-  --light L \
-  --cdr-lengths 'H3:8-16' \
-  --energy true
-```
 
 ### Classifier-free guidance
 
@@ -225,10 +192,3 @@ The docking workflow uses HDOCK from Professor Sheng-You Huang's group at the Sc
 
 > Yan, Y., Zhang, D., Zhou, P., Li, B. & Huang, S.-Y. HDOCK: a web server for protein-protein and protein-DNA/RNA docking based on a hybrid strategy. *Nucleic Acids Research* **45**, W365-W373 (2017). [https://doi.org/10.1093/nar/gkx407](https://doi.org/10.1093/nar/gkx407)
 
-## License
-
-The original ForceFlowAb source code is released under the [MIT License](LICENSE). Third-party code, bundled HDOCK executables, and SAbDab-derived metadata are not relicensed by this repository and remain subject to their respective licenses and terms of use.
-
-## Citation
-
-If you use ForceFlowAb in academic work, please add the project citation here once the corresponding paper or preprint is available.
