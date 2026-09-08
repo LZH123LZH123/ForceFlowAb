@@ -1,0 +1,38 @@
+mode: multiple_cdrs
+model:
+  checkpoint: ./trained_models/checkpoint_best.pt
+
+
+
+sampling:
+  seed: 2022
+  sample_structure: true
+  sample_sequence: true
+  classifier_free_guidance:
+    enabled: true
+    scale: 1.5
+  cdrs:
+    - H_CDR1
+    - H_CDR2
+    - H_CDR3
+  # Optional examples:
+  # cdr_lengths: {H_CDR3: 8-16}
+  # cdr_initial_residues: {H_CDR3: GLY}
+  cdr_lengths: {}
+  cdr_initial_residues: {}
+  cdr_initial_residue_strength: 1.0
+  num_samples: 32
+  scope: 0.4
+  energy_guidance:
+    enabled: false
+    start_step: 69
+    end_step: 79
+    warmup_steps: 0
+
+dataset:
+  test:
+    type: sabdab
+    summary_path: ./data/sabdab_summary_all.tsv
+    chothia_dir: ./data/all_structures/chothia
+    processed_dir: ./data/processed_RF
+    split: test
