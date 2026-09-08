@@ -14,15 +14,7 @@ conda env create -f env.yaml
 conda activate ForceFlowAb
 ```
 
-The repository includes `data/sabdab_summary_all.tsv`, a snapshot of the SAbDab index used by the example configurations. Download the corresponding antibody structure files separately, place them under `data/`, and update the dataset paths in the selected YAML configuration. Large structure datasets remain excluded from version control.
-
-## Template-free data flow
-
-The ForceFlowAb training and inference paths do not read or construct a
-separate structural template. Dataset items, padded batches, model interfaces,
-and sampling runners pass only the target antibody–antigen structure and its
-design masks. Existing checkpoints remain compatible because the removed
-template path did not own trainable parameters.
+The repository includes `data/sabdab_summary_all.tsv`, a snapshot of the SAbDab index used by the example configurations. Download the corresponding antibody structure files separately, place them under `data/`, and update the dataset paths in the selected YAML configuration. 
 
 ## Pretrained Weights
 
@@ -32,20 +24,6 @@ The pretrained checkpoints are hosted on https://huggingface.co/SherrySherry123/
 
 Run a single training stage with a YAML configuration:
 
-```bash
-python train.py configs/train/codesign_muti_rectflow_RF.yml
-```
-
-Useful options include:
-
-```text
---logdir PATH       Directory for logs and checkpoints (default: ./logs)
---device DEVICE     Training device (default: cuda)
---num_workers N     Data-loader workers (default: 8)
---resume PATH       Resume from a checkpoint
---finetune PATH     Fine-tune from a checkpoint
---debug             Disable persistent experiment logging
-```
 
 For the two-stage workflow:
 
@@ -66,18 +44,6 @@ bash ./train_two_stage.sh
 ```
 
 ## Inference
-
-Inference behavior is controlled by files under `configs/test/`. Before running inference, set `model.checkpoint` in the selected configuration to a local trained checkpoint.
-
-### Design on a test split
-
-```bash
-python design_testset.py 0 \
-  --config ./configs/test/moe/codesign_single_H3_0.4.yml \
-  --out_root ./results
-```
-
-Here, `0` is the zero-based index of the structure in the configured test split.
 
 ### Design from a PDB structure
 
