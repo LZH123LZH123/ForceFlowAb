@@ -77,17 +77,12 @@ sampling:
 ```
 
 Supported CDR names are `H1`, `H2`, `H3`, `L1`, `L2`, and `L3`; supported
-lengths are 5–30 residues. Range sampling preserves the requested total
-`num_samples`: outputs that happen to select the same length combination are
-batched together. These YAML values are used directly by `design_pdb.py` and
-are preserved when `DP.sh` builds its per-job configuration; a
-`--cdr-lengths` argument overrides only `cdr_lengths`.
+lengths are 5–30 residues. 
 
 `cdr_initial_residues` accepts a standard one-letter or three-letter amino-acid
 code, such as `G` or `GLY`, and repeats that type across the selected CDR. It
 also accepts an exact one-letter sequence when its length matches the target
-CDR, for example `H_CDR3: GYSGYSGY`. Exact sequences should normally be paired
-with a fixed `cdr_lengths` value rather than a random range.
+CDR, for example `H_CDR3: GYSGYSGY`. 
 
 This is a soft sampling prior, not a hard final-sequence constraint: generated
 sequence noise is shifted by
@@ -95,17 +90,6 @@ sequence noise is shifted by
 mild bias; larger values give a stronger and more out-of-distribution bias.
 Omit the CDR (or leave the mapping empty) for the original unbiased Gaussian
 initialization.
-
-The main generated-region amino-acid tensor remains `UNK`, and generated
-sequence/structure features remain masked. Added residues use finite N/CA/C
-backbone placeholders with valid backbone masks.
-
-Energy guidance is compatible with resized CDRs. The energy preprocessor uses
-the selected heavy/light chain IDs and the actual Chothia residue identifiers
-written to each intermediate PDB, including insertion codes. Before applying a
-gradient, it verifies that the number of selected CDR C-alpha atoms equals the
-per-sample `generate_flag` count. The energy backend runs on the same device as
-the sampler. Enable it together with variable lengths, for example:
 
 
 ### Classifier-free guidance
