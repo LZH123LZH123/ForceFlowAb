@@ -20,7 +20,7 @@ The repository includes `data/sabdab_summary_all.tsv`, a snapshot of the SAbDab 
 
 ## Pretrained Weights
 
-The pretrained checkpoints are hosted on https://huggingface.co/SherrySherry123/ForceFlowAb
+The pretrained checkpoints are hosted on [https://huggingface.co/SherrySherry123/ForceFlowAb](https://huggingface.co/SherrySherry123/ForceFlowAb_CFG)
 
 ## Training
 
